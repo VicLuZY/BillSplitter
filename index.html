@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A modern bill splitting application for fair expense sharing among multiple people">
+    <meta name="author" content="Victor Lü">
+    <title>Bill Splitter - Fair Expense Sharing Made Easy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="js/data-manager.js" as="script">
+    <link rel="preload" href="js/calculation-engine.js" as="script">
+    <link rel="preload" href="js/ui-manager.js" as="script">
+    <link rel="preload" href="js/file-manager.js" as="script">
+    <link rel="preload" href="js/app.js" as="script">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="app-container">
+        <!-- Application Header -->
+        <header class="app-header" role="banner">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <span class="app-icon" aria-hidden="true">💰</span>
+                    Bill Splitter
+                </h1>
+                <p class="app-description">
+                    Calculate how much each participant owes to others
+                </p>
+            </div>
+        </header>
+
+        <!-- User Manual Section -->
+        <section class="manual-section" aria-labelledby="manual-heading">
+            <header class="manual-header">
+                <h2 id="manual-heading">
+                    <span class="section-icon" aria-hidden="true">📖</span>
+                    How to Use This Bill Splitter
+                </h2>
+                <button 
+                    class="collapse-btn" 
+                    id="collapseBtn"
+                    aria-expanded="true"
+                    aria-controls="manualContent"
+                    aria-label="Toggle manual section"
+                    onclick="toggleManual()"
+                >
+                    <span class="collapse-icon" aria-hidden="true">−</span>
+                </button>
+            </header>
+            
+            <div class="manual-content" id="manualContent" aria-labelledby="manual-heading">
+                <article class="manual-step">
+                    <h3>
+                        <span class="step-icon" aria-hidden="true">🎯</span>
+                        What This Tool Does
+                    </h3>
+                    <p>This bill splitter helps you fairly divide expenses among multiple people. It's perfect for:</p>
+                    <ul class="use-cases">
+                        <li><span class="case-icon" aria-hidden="true">🏠</span> Roommate expenses (rent, utilities, groceries)</li>
+                        <li><span class="case-icon" aria-hidden="true">🍽️</span> Restaurant bills and group dining</li>
+                        <li><span class="case-icon" aria-hidden="true">🚗</span> Trip expenses (gas, hotels, activities)</li>
+                        <li><span class="case-icon" aria-hidden="true">🎉</span> Party or event costs</li>
+                        <li><span class="case-icon" aria-hidden="true">📦</span> Group purchases and shared items</li>
+                    </ul>
+                </article>
+
+                <article class="manual-step">
+                    <h3>
+                        <span class="step-icon" aria-hidden="true">📋</span>
+                        Step-by-Step Instructions
+                    </h3>
+                    
+                    <div class="step-item">
+                        <h4>Step 1: Set Up Participants</h4>
+                        <p>Enter the number of people splitting the bills (2+ people). Give each person a name so you can easily identify them in the results.</p>
+                    </div>
+
+                    <div class="step-item">
+                        <h4>Step 2: Add Your Bills</h4>
+                        <p>For each expense:</p>
+                        <ul>
+                            <li><strong>Who Paid:</strong> Select who actually paid this bill</li>
+                            <li><strong>Amount:</strong> Enter the total amount paid</li>
+                            <li><strong>Participants:</strong> Check the boxes for everyone who should share this expense</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-item">
+                        <h4>Step 3: Review Results</h4>
+                        <p>The app automatically calculates:</p>
+                        <ul>
+                            <li>How much each person paid in total</li>
+                            <li>How much each person owes for their share</li>
+                            <li>Who owes money to whom</li>
+                            <li>Optimal payment transfers to minimize the number of transactions</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article class="manual-step">
+                    <h3>
+                        <span class="step-icon" aria-hidden="true">💡</span>
+                        Pro Tips
+                    </h3>
+                    <ul class="pro-tips">
+                        <li><strong>Add bills as you go:</strong> Don't wait until the end - add each bill as it happens</li>
+                        <li><strong>Be specific about participants:</strong> Only check people who should pay for that specific expense</li>
+                        <li><strong>Use descriptive names:</strong> "Alice" is better than "Person 1"</li>
+                        <li><strong>Export results:</strong> Save your calculations for future reference</li>
+                        <li><strong>Real-time updates:</strong> Results update automatically as you type</li>
+                    </ul>
+                </article>
+
+                <article class="manual-step">
+                    <h3>
+                        <span class="step-icon" aria-hidden="true">🔍</span>
+                        Understanding the Results
+                    </h3>
+                    <div class="result-explanation">
+                        <dl>
+                            <dt><strong>Total Paid:</strong></dt>
+                            <dd>How much this person actually spent</dd>
+                            
+                            <dt><strong>Total Owed:</strong></dt>
+                            <dd>How much this person should pay for their share of all bills</dd>
+                            
+                            <dt><strong>Balance:</strong></dt>
+                            <dd>The difference (positive = they're owed money, negative = they owe money)</dd>
+                            
+                            <dt><strong>Owes to/Owed by:</strong></dt>
+                            <dd>Specific amounts each person should pay to others</dd>
+                        </dl>
+                    </div>
+                </article>
+
+                <article class="manual-step">
+                    <h3>
+                        <span class="step-icon" aria-hidden="true">⚡</span>
+                        Quick Start Example
+                    </h3>
+                    <div class="example-scenario">
+                        <p><strong>Scenario:</strong> 4 friends go to dinner</p>
+                        <ul>
+                            <li>Alice pays $100 for everyone's meals</li>
+                            <li>Bob pays $30 for drinks</li>
+                            <li>Charlie pays $40 for dessert</li>
+                            <li>Diana pays $20 for tip</li>
+                        </ul>
+                        <p><strong>Result:</strong> Each person owes $47.50 total, so Alice gets money back while others pay her.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Main Application Content -->
+        <main id="main-content" class="main-content" role="main">
+            <!-- Input Section -->
+            <section class="input-section" aria-labelledby="input-heading">
+                <header class="section-header">
+                    <h2 id="input-heading">
+                        <span class="section-icon" aria-hidden="true">📝</span>
+                        Enter Data
+                    </h2>
+                </header>
+                
+                <!-- Participant Management -->
+                <div class="participant-management" role="region" aria-labelledby="participants-heading">
+                    <h3 id="participants-heading">
+                        <span class="section-icon" aria-hidden="true">👥</span>
+                        Participants
+                    </h3>
+                    <div class="participant-controls">
+                        <div class="participant-input-group">
+                            <label for="participantCount" class="input-label">
+                                Number of participants:
+                            </label>
+                            <input 
+                                type="number" 
+                                id="participantCount" 
+                                name="participantCount"
+                                min="2" 
+                                max="20"
+                                value="4"
+                                aria-describedby="participantCount-help"
+                                class="number-input"
+                            >
+                            <button 
+                                type="button"
+                                class="btn btn-primary"
+                                onclick="updateParticipantCount()"
+                                aria-describedby="participantCount-help"
+                            >
+                                Update
+                            </button>
+                            <div id="participantCount-help" class="help-text">
+                                Enter a number between 2 and 20
+                            </div>
+                        </div>
+                        
+                        <div class="participant-names" role="group" aria-labelledby="participant-names-heading">
+                            <h4 id="participant-names-heading" class="participant-names-heading">
+                                Participant Names:
+                            </h4>
+                            <div id="participantNames" class="participant-name-inputs" role="list" aria-label="Participant names"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bills Table -->
+                <div class="bills-section" role="region" aria-labelledby="bills-heading">
+                    <h3 id="bills-heading">
+                        <span class="section-icon" aria-hidden="true">💳</span>
+                        Bills & Expenses
+                    </h3>
+                    
+                    <!-- Table Controls -->
+                    <div class="table-controls" role="toolbar" aria-label="Bill table controls">
+                        <button 
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="addBillRow()"
+                            aria-label="Add a new bill row"
+                        >
+                            <span aria-hidden="true">➕</span> Add Bill
+                        </button>
+                        <button 
+                            type="button"
+                            class="btn btn-success"
+                            onclick="loadFromJSON()"
+                            aria-label="Load data from JSON file"
+                        >
+                            <span aria-hidden="true">📂</span> Load JSON
+                        </button>
+                        <button 
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="saveToJSON()"
+                            aria-label="Save data to JSON file"
+                        >
+                            <span aria-hidden="true">💾</span> Save JSON
+                        </button>
+                    </div>
+                    
+                    <!-- Sort Controls -->
+                    <div class="sort-controls" role="toolbar" aria-label="Table sorting controls">
+                        <span class="sort-label">Sort by:</span>
+                        <button 
+                            type="button"
+                            class="btn btn-sm btn-outline"
+                            onclick="sortTable('whoPaid')"
+                            aria-label="Sort by who paid"
+                        >
+                            Who Paid
+                        </button>
+                        <button 
+                            type="button"
+                            class="btn btn-sm btn-outline"
+                            onclick="sortTable('amount')"
+                            aria-label="Sort by amount"
+                        >
+                            Amount
+                        </button>
+                        <button 
+                            type="button"
+                            class="btn btn-sm btn-outline"
+                            onclick="sortTable('notes')"
+                            aria-label="Sort by notes"
+                        >
+                            Notes
+                        </button>
+                        <button 
+                            type="button"
+                            class="btn btn-sm btn-outline"
+                            onclick="sortTable('date')"
+                            aria-label="Sort by date added"
+                        >
+                            Date Added
+                        </button>
+                    </div>
+                    
+                    <!-- Table Container -->
+                    <div class="table-container" role="region" aria-label="Bills table">
+                        <table id="billsTable" role="table" aria-label="Bills and expenses">
+                            <thead>
+                                <tr id="tableHeaderRow" role="row">
+                                    <th scope="col" role="columnheader">Delete</th>
+                                    <th scope="col" role="columnheader">Who Paid</th>
+                                    <th scope="col" role="columnheader">Amount ($)</th>
+                                    <th scope="col" role="columnheader">Notes</th>
+                                    <!-- Participant headers will be generated dynamically -->
+                                </tr>
+                            </thead>
+                            <tbody id="billsTableBody" role="rowgroup">
+                                <!-- Rows will be generated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section 
+                class="results-section" 
+                id="resultsSection" 
+                aria-labelledby="results-heading"
+                style="display: none;"
+                role="region"
+            >
+                <header class="section-header">
+                    <h2 id="results-heading">
+                        <span class="section-icon" aria-hidden="true">📊</span>
+                        Results
+                    </h2>
+                </header>
+                
+                <!-- Summary -->
+                <div class="summary" id="summary" role="region" aria-label="Calculation summary"></div>
+                
+                <!-- Detailed Results -->
+                <div class="results-grid" id="resultsGrid" role="region" aria-label="Detailed participant results"></div>
+                
+                <!-- Export Buttons -->
+                <div class="button-group" role="toolbar" aria-label="Export options">
+                    <button 
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="exportResults()"
+                        aria-label="Export results to text file"
+                    >
+                        <span aria-hidden="true">📄</span> Export Results
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Application Footer -->
+        <footer class="app-footer" role="contentinfo">
+            <p>Made with <span aria-label="love">❤️</span> for fair bill splitting</p>
+            <p>&copy; 2025 Victor Lü. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Hidden file input for JSON loading -->
+    <input 
+        type="file" 
+        id="jsonFileInput" 
+        accept=".json" 
+        style="display: none;" 
+        aria-label="Select JSON file to load"
+    >
+
+    <!-- Loading Scripts -->
+    <script src="js/data-manager.js"></script>
+    <script src="js/calculation-engine.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/file-manager.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Global function wrappers for HTML onclick handlers -->
+    <script>
+        // Global function wrappers to maintain compatibility with HTML onclick handlers
+        function updateParticipantCount() {
+            console.log('updateParticipantCount called');
+            if (window.billSplitterApp && window.billSplitterApp.uiManager) {
+                window.billSplitterApp.uiManager.handleParticipantCountChange();
+            } else {
+                console.error('App not initialized or uiManager not available');
+            }
+        }
+        
+        function addBillRow() {
+            console.log('addBillRow called');
+            if (window.billSplitterApp && window.billSplitterApp.uiManager) {
+                window.billSplitterApp.uiManager.addBillRow();
+            } else {
+                console.error('App not initialized or uiManager not available');
+            }
+        }
+        
+        
+        
+        
+        function sortTable(sortBy) {
+            console.log('sortTable called with:', sortBy);
+            if (window.billSplitterApp && window.billSplitterApp.uiManager) {
+                window.billSplitterApp.uiManager.sortTable(sortBy);
+            } else {
+                console.error('App not initialized or uiManager not available');
+            }
+        }
+        
+        function saveToJSON() {
+            console.log('saveToJSON called');
+            if (window.billSplitterApp && window.billSplitterApp.fileManager) {
+                window.billSplitterApp.fileManager.saveToJSON();
+            } else {
+                console.error('App not initialized or fileManager not available');
+            }
+        }
+        
+        function loadFromJSON() {
+            console.log('loadFromJSON called');
+            if (window.billSplitterApp && window.billSplitterApp.fileManager) {
+                window.billSplitterApp.fileManager.loadFromJSON();
+            } else {
+                console.error('App not initialized or fileManager not available');
+            }
+        }
+        
+        function exportResults() {
+            console.log('exportResults called');
+            if (window.billSplitterApp && window.billSplitterApp.fileManager) {
+                window.billSplitterApp.fileManager.exportResultsToText();
+            } else {
+                console.error('App not initialized or fileManager not available');
+            }
+        }
+        
+        function toggleManual() {
+            if (window.billSplitterApp && window.billSplitterApp.uiManager) {
+                window.billSplitterApp.uiManager.toggleManual();
+            }
+        }
+    </script>
+</body>
+</html> 
