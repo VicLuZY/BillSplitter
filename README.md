@@ -1,13 +1,13 @@
-# Bill Splitter - Refactored Codebase
+# Bill Splitter
 
-A modern, feature-rich bill splitting application built with clean architecture and best practices.
+A modern, feature-rich bill splitting application for calculating fair expense splits among multiple participants.
 
 ## 🚀 Features
 
 - **Fair Bill Splitting**: Calculate how much each participant owes to others
 - **Real-time Calculations**: Automatic updates as you type
 - **Data Persistence**: Save and load your data as JSON files
-- **Export Options**: Export results to text and CSV formats
+- **Export Options**: Export results to text format
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Accessibility**: Full keyboard navigation and screen reader support
 - **Modern UI**: Clean, intuitive interface with smooth animations
@@ -30,7 +30,7 @@ The application is built using a modular architecture with clear separation of c
 
 3. **UIManager** (`js/ui-manager.js`)
    - Handles all DOM manipulation and user interactions
-   - Manages table operations (sorting, grouping, drag & drop)
+   - Manages table operations (sorting, drag & drop)
    - Updates the interface in real-time
 
 4. **FileManager** (`js/file-manager.js`)
@@ -47,23 +47,22 @@ The application is built using a modular architecture with clear separation of c
 
 ```
 Bills/
-├── index-refactored.html          # Main HTML file with improved accessibility
-├── styles-refactored.css          # Modern CSS with CSS custom properties
+├── index.html                    # Main HTML file
+├── styles.css                    # Modern CSS with CSS custom properties
 ├── js/
-│   ├── data-manager.js            # Data management module
-│   ├── calculation-engine.js      # Calculation logic module
-│   ├── ui-manager.js              # User interface module
-│   ├── file-manager.js            # File operations module
-│   └── app.js                     # Main application controller
-├── README-refactored.md           # This documentation
-└── [original files]               # Original implementation files
+│   ├── data-manager.js           # Data management module
+│   ├── calculation-engine.js     # Calculation logic module
+│   ├── ui-manager.js             # User interface module
+│   ├── file-manager.js           # File operations module
+│   └── app.js                    # Main application controller
+└── README.md                     # This documentation
 ```
 
 ## 🎨 Design System
 
 ### CSS Custom Properties
 
-The refactored CSS uses CSS custom properties (variables) for consistent theming:
+The application uses CSS custom properties (variables) for consistent theming:
 
 ```css
 :root {
@@ -90,11 +89,12 @@ The refactored CSS uses CSS custom properties (variables) for consistent theming
 - **Responsive**: Scales appropriately on different screen sizes
 - **Accessibility**: High contrast support and reduced motion options
 
-## 🔧 Key Improvements
+## 🔧 Key Features
 
 ### 1. Modular Architecture
-- **Before**: Single 800+ line JavaScript file
-- **After**: 5 focused modules with clear responsibilities
+- 5 focused modules with clear responsibilities
+- Clean separation of concerns
+- Easy to maintain and extend
 
 ### 2. Error Handling
 - Comprehensive input validation
@@ -128,7 +128,7 @@ The refactored CSS uses CSS custom properties (variables) for consistent theming
 ### Installation
 
 1. Clone or download the project files
-2. Open `index-refactored.html` in your web browser
+2. Open `index.html` in your web browser
 3. Or serve the files using a local web server:
 
 ```bash
@@ -148,7 +148,7 @@ php -S localhost:8000
 2. **Add Bills**: Enter expenses with who paid and who should share
 3. **View Results**: See calculated balances and payment instructions
 4. **Save/Load**: Use JSON files to persist your data
-5. **Export**: Download results in text or CSV format
+5. **Export**: Download results in text format
 
 ## ⌨️ Keyboard Shortcuts
 
@@ -160,21 +160,12 @@ php -S localhost:8000
 
 ## 🧪 Testing
 
-The refactored codebase includes comprehensive error handling and validation:
+The application includes comprehensive error handling and validation:
 
 - Input validation for all user inputs
 - File format validation for JSON imports
 - Graceful error recovery
 - User-friendly error messages
-
-## 🔄 Migration from Original
-
-The refactored version maintains full compatibility with the original functionality while providing:
-
-- Better code organization
-- Improved performance
-- Enhanced accessibility
-- Modern development practices
 
 ## 📱 Browser Support
 
@@ -218,8 +209,4 @@ Potential improvements for future versions:
 
 ## 📞 Support
 
-For issues or questions about the refactored codebase, please refer to the code documentation or create an issue in the project repository.
-
----
-
-**Note**: This is the refactored version of the Bill Splitter application. The original files are preserved for reference and comparison.
+For issues or questions, please refer to the code documentation or create an issue in the project repository.
